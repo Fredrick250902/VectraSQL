@@ -1,0 +1,78 @@
+version: '3.8'
+
+services:
+  # 1. Metadata Database for Airflow
+  postgres:
+    image: postgres:13
+    container_name: airflow_postgres
+    environment:
+      - POSTGRES_USER=airflow
+      - POSTGRES_PASSWORD=airflow
+      - POSTGRES_DB=airflow
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U airflow"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # 2. Your Target Data Warehouse
+  mysql:
+    image: mysql:8.0
+    container_name: invoice_mysql
+    ports:
+      - "3307:3306"
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      MYSQL_DATABASE: ${MYSQL_DATABASE}
+    volumes:
+      - ./init.sql:/docker-entrypoint-initdb.d/init.sql
+    healthcheck:
+      test: ["CMD", "mysqladmin" ,"ping", "-h", "localhost"]
+      timeout: 20s
+      retries: 10
+
+  # 3. Airflow Webserver (The UI)
+  airflow-webserver:
+    image: apache/airflow:2.10.2
+    container_name: airflow_webserver
+    depends_on:
+      postgres:
+        condition: service_healthy
+      mysql:
+        condition: service_started
+    environment:
+      # Specifically using the versions that match Airflow 2.10.2 constraints
+      - _PIP_ADDITIONAL_REQUIREMENTS=pymongo==4.8.0 apache-airflow-providers-mysql==5.7.0 apache-airflow-providers-mongo==4.2.0
+      - AIRFLOW__DATABASE__SQL_ALCHEMY_CONN=postgresql+psycopg2://airflow:airflow@postgres/airflow
+      - AIRFLOW__CORE__EXECUTOR=LocalExecutor
+      - AIRFLOW__CORE__LOAD_EXAMPLES=False
+      - AIRFLOW_CONN_MYSQL_DEFAULT=mysql://root:${MYSQL_ROOT_PASSWORD}@mysql:3306/${MYSQL_DATABASE}
+      - MONGO_URI=${MONGO_URI}
+    ports:
+      - "8080:8080"
+    volumes:
+      - ./dags:/opt/airflow/dags
+    # This command initializes the DB, creates the admin user, then starts the webserver
+    command: >
+      bash -c "airflow db init && 
+      airflow users create --username admin --firstname admin --lastname admin --role Admin --email admin@example.com --password admin && 
+      airflow webserver"
+
+  # 4. Airflow Scheduler (The Brain)
+  airflow-scheduler:
+    image: apache/airflow:2.10.2
+    container_name: airflow_scheduler
+    depends_on:
+      postgres:
+        condition: service_healthy
+      airflow-webserver:
+        condition: service_started
+    environment:
+      - _PIP_ADDITIONAL_REQUIREMENTS=pymongo==4.8.0 apache-airflow-providers-mysql==5.7.0 apache-airflow-providers-mongo==4.2.0
+      - AIRFLOW__DATABASE__SQL_ALCHEMY_CONN=postgresql+psycopg2://airflow:airflow@postgres/airflow
+      - AIRFLOW__CORE__EXECUTOR=LocalExecutor
+      - AIRFLOW_CONN_MYSQL_DEFAULT=mysql://root:${MYSQL_ROOT_PASSWORD}@mysql:3306/${MYSQL_DATABASE}
+      - MONGO_URI=${MONGO_URI}
+    volumes:
+      - ./dags:/opt/airflow/dags
+    command: scheduler
