@@ -142,5 +142,5 @@ ___
 - Metadata-based filtering in searches
 - Streaming LLM responses for queries
 ___
-📜 License
+### 📜 License
 This project is licensed under the MIT License.
