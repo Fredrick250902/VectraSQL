@@ -53,5 +53,13 @@ Make sure you have the following installed:
 ___
 🔐 Environment Variables
 Create a .env file in the project root:
-- HF_API_KEY = your_huggingface_api_key
-- GROQ_API_KEY = your_groq_api_key
+1. MongoDB Atlas
+MONGO_URI = "mongodb+srv://<username>:<password>@<clusterid>.mongodb.net/?appName=<clustername>"
+
+2. AI API Keys
+GROQ_API_KEY="your_groq_key_here"
+HF_API_KEY="your_huggingface_key_here"
+
+3. MySQL Config
+MYSQL_ROOT_PASSWORD="set_your_root_password"
+MYSQL_DATABASE="set_your_db_name"
