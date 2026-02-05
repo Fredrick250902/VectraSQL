@@ -1,0 +1,10 @@
+# MongoDB Atlas
+MONGO_URI = "mongodb+srv://<username>:<password>@<clusterid>.mongodb.net/?appName=<clustername>"
+
+# AI API Keys
+GROQ_API_KEY="your_groq_key_here"
+HF_API_KEY="your_huggingface_key_here"
+
+# MySQL Config
+MYSQL_ROOT_PASSWORD="set_your_root_password"
+MYSQL_DATABASE="set_your_db_name"
