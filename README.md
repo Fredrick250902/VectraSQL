@@ -1,5 +1,6 @@
 ## 🔗 VectraSQL
 VectraSQL is an intelligent invoice processing system that leverages a dual-database architecture to handle both unstructured and structured data efficiently. It combines MongoDB Atlas for vector-based semantic search (using embeddings for natural language queries) and MySQL for structured, relational data storage. The system uses Large Language Models (LLMs) for OCR text extraction from images, data structuring, and semantic retrieval, orchestrated via Apache Airflow for automated data synchronization.
+
 This project uses:
 - MongoDB Atlas for vector storage and semantic search
 - MySQL for structured data warehousing
@@ -53,8 +54,9 @@ Make sure you have the following installed:
 ___
 ### 🔐 Environment Variables
 Create a .env file in the project root:
+
 1. MongoDB Atlas
-- MONGO_URI = "mongodb+srv://<username>:<password>@<clusterid>.mongodb.net/?appName=<clustername>"
+- MONGO_URI = "mongodb+srv://username:password@clusterid.mongodb.net/?appName=clustername"
 
 2. AI API Keys
 - GROQ_API_KEY="your_groq_key_here"
@@ -79,7 +81,8 @@ ___
 
 4️. Configure Airflow Connections and Variables
 
-**Step 1: Create/Edit the MySQL Connection**
+Step 1: Create/Edit the MySQL Connection
+
 By default, the mysql_default connection ID is created when you run docker-compose up, based on the environment variable in the YAML. However, you may need to verify or edit its details.
 Open localhost:8080 and log in.
 
@@ -95,12 +98,13 @@ Open localhost:8080 and log in.
 - Port: 3306 (Internal Docker port).
 - Click Save.
 
-**Step 2: Trigger the Sync**
+Step 2: Trigger the Sync
 - Go back to the DAGs home page.
 - Toggle the switch next to atlas_to_mysql_sync to ON (Blue).
 - On the far right, click the Play button (Trigger DAG).
 
-**Step 3: Set up New Connection in MySQL Workbench**
+Step 3: Set up New Connection in MySQL Workbench
+
 To connect externally to MySQL (e.g., for querying or debugging), use MySQL Workbench or a client.
 
 Create a new connection with:
