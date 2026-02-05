@@ -81,7 +81,7 @@ ___
 
 4️. Configure Airflow Connections and Variables
 
-Step 1: Create/Edit the MySQL Connection
+**Step 1: Create/Edit the MySQL Connection**
 
 By default, the mysql_default connection ID is created when you run docker-compose up, based on the environment variable in the YAML. However, you may need to verify or edit its details.
 Open localhost:8080 and log in.
@@ -98,12 +98,12 @@ Open localhost:8080 and log in.
 - Port: 3306 (Internal Docker port).
 - Click Save.
 
-Step 2: Trigger the Sync
+**Step 2: Trigger the Sync**
 - Go back to the DAGs home page.
 - Toggle the switch next to atlas_to_mysql_sync to ON (Blue).
 - On the far right, click the Play button (Trigger DAG).
 
-Step 3: Set up New Connection in MySQL Workbench
+**Step 3: Set up New Connection in MySQL Workbench**
 
 To connect externally to MySQL (e.g., for querying or debugging), use MySQL Workbench or a client.
 
