@@ -56,7 +56,7 @@ ___
 Create a .env file in the project root:
 
 1. MongoDB Atlas
-- MONGO_URI = "mongodb+srv://username:password@clusterid.mongodb.net/?appName=clustername"
+- MONGO_URI = "mongodb+srv://your_username:your_password@your_clusterid.mongodb.net/?appName=your_clustername"
 
 2. AI API Keys
 - GROQ_API_KEY="your_groq_key_here"
